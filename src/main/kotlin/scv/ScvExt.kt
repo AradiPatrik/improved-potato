@@ -16,6 +16,13 @@ fun S2Agent.trainScvWith(commandCenter: UnitInPool) {
     actions().unitCommand(commandCenter.unit(), Abilities.TRAIN_SCV, false)
 }
 
+fun S2Agent.trainMarineWith(barack: UnitInPool) {
+    require(barack.unit().type == Units.TERRAN_BARRACKS) {
+        "Barack is expected, got: ${barack.unit().type.unitTypeId}"
+    }
+    actions().unitCommand(barack.unit(), Abilities.TRAIN_MARINE, false)
+}
+
 fun S2Agent.mineClosestMineralFieldWith(scv: UnitInPool) {
     require(scv.unit().type == Units.TERRAN_SCV) {
         "Terran scv expected, got: ${scv.unit().type.unitTypeId}"
