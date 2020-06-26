@@ -2,7 +2,7 @@ package map
 
 import com.github.ocraft.s2client.bot.gateway.ObservationInterface
 import com.github.ocraft.s2client.protocol.data.Units
-import common.neutralUnits
+import common.neutrals
 
 private val mineralFieldTypes = listOf(
     Units.NEUTRAL_BATTLE_STATION_MINERAL_FIELD,
@@ -23,4 +23,4 @@ private val mineralFieldTypes = listOf(
 )
 
 val ObservationInterface.mineralFields
-    get() = neutralUnits.filter { mineralFieldTypes.contains(it.unit().type) }
+    get() = neutrals.filter { mineralFieldTypes.contains(it.unit().type) }

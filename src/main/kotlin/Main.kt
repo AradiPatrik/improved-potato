@@ -2,12 +2,13 @@ import building.*
 import com.github.ocraft.s2client.bot.S2Agent
 import com.github.ocraft.s2client.bot.S2Coordinator
 import com.github.ocraft.s2client.bot.gateway.UnitInPool
-import com.github.ocraft.s2client.protocol.data.Abilities
 import com.github.ocraft.s2client.protocol.data.Units
 import com.github.ocraft.s2client.protocol.game.BattlenetMap
 import com.github.ocraft.s2client.protocol.game.Difficulty
 import com.github.ocraft.s2client.protocol.game.Race
 import map.S2Map
+import scv.mineClosestMineralFieldWith
+import scv.trainScvWith
 
 class Bot : S2Agent() {
     override fun onGameStart() {
@@ -16,7 +17,8 @@ class Bot : S2Agent() {
 
     override fun onUnitIdle(unitInPool: UnitInPool) {
         when (unitInPool.unit().type) {
-            Units.TERRAN_COMMAND_CENTER -> actions().unitCommand(unitInPool.unit(), Abilities.TRAIN_SCV, false)
+            Units.TERRAN_COMMAND_CENTER -> trainScvWith(unitInPool)
+            Units.TERRAN_SCV -> mineClosestMineralFieldWith(unitInPool)
         }
     }
 

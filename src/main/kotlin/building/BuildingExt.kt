@@ -28,13 +28,30 @@ val ObservationInterface.myScvs get() = myUnits
         unitInPool.unit().type == Units.TERRAN_SCV
     }
 
-fun S2Agent.buildSupplyDepotWith(scv: UnitInPool, position: Point2d? = null) {
-    build(scv, BuildingType.SupplyDepot, position ?: randomPositionNear(scv))
+val ObservationInterface.myCommandCenters get() = myUnits
+        .filter { unitInPool ->
+            unitInPool.unit().type == Units.TERRAN_COMMAND_CENTER
+        }
+
+fun S2Agent.buildSupplyDepotWith(
+        scv: UnitInPool,
+        position: Point2d? = null,
+        shouldQueCommand: Boolean = false
+) {
+    build(scv, BuildingType.SupplyDepot, position ?: randomPositionNear(scv), shouldQueCommand)
 }
 
-private fun S2Agent.build(scv: UnitInPool, buildingType: BuildingType, position: Point2d) {
-    actions().unitCommand(scv.unit(), buildingType.ability, position, false)
+private fun S2Agent.build(
+        scv: UnitInPool,
+        buildingType: BuildingType,
+        position: Point2d,
+        shouldQueCommand: Boolean
+) {
+    actions().unitCommand(scv.unit(), buildingType.ability, position, shouldQueCommand)
 }
 
 fun randomPositionNear(unit: UnitInPool) = unit.unit().position
-    .toPoint2d() + Point2d.of(Random.nextFloat(), Random.nextFloat()) * 15.0f
+    .toPoint2d() + Point2d.of(
+        Random.nextFloat() * 2 - 1,
+        Random.nextFloat() * 2 - 1
+) * 15.0f
