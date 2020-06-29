@@ -8,6 +8,8 @@ import com.github.ocraft.s2client.protocol.game.BattlenetMap
 import com.github.ocraft.s2client.protocol.game.Difficulty
 import com.github.ocraft.s2client.protocol.game.Race
 import common.myUnits
+import map.getMapHeightAtLocation
+import map.showPlacementGrid
 import scv.mineClosestMineralFieldWith
 import scv.trainMarineWith
 import scv.trainScvWith
@@ -35,6 +37,12 @@ class Bot : S2Agent() {
             buildSupplyDepotWith(mineralMiningScvs.first())
         }
 
+        showPlacementGrid()
+        println(myCommandCenters.first().unit().position.z)
+        println(getMapHeightAtLocation(
+            myCommandCenters.first().unit().position.toPoint2d()
+        ))
+
         if (supply > 16 && minerals > 150 && isEveryBuildingTraining && workersBuilding(BuildingType.Barack).isEmpty()) {
             buildBarackWith(mineralMiningScvs.first())
         }
@@ -49,6 +57,7 @@ class Bot : S2Agent() {
     }
 }
 
+@ExperimentalStdlibApi
 fun main() {
     val coordinator = S2Coordinator.setup()
         .loadSettings(arrayOf())
