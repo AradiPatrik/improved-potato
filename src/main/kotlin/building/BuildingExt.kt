@@ -20,8 +20,22 @@ val S2Agent.supply get() = observation().foodUsed
 val S2Agent.minerals get() = observation().minerals
 
 val S2Agent.isEveryBuildingTraining
-    get() = (myBarracks + myCommandCenters)
+    get() = myBarracks
         .all { it.unit().orders.isNotEmpty() }
+
+fun S2Agent.lowerSupplyDepot(supplyDepot: UnitInPool) {
+    require(supplyDepot.unit().type == Units.TERRAN_SUPPLY_DEPOT) {
+        "Supply depot expected but recieved: ${supplyDepot.unit().type}"
+    }
+    actions().unitCommand(supplyDepot.unit(), Abilities.MORPH_SUPPLY_DEPOT_LOWER, false)
+}
+
+val S2Agent.optimalNumOfWorkersBuildingSupplyDepots get() = when {
+        supply < 40 && foodUntilSupplyBlocked < 3 -> 1
+        supply < 100 && foodUntilSupplyBlocked < 6 -> 2
+        supply < 170 && foodUntilSupplyBlocked < 12 -> 3
+        else -> 0
+    }
 
 fun S2Agent.workersBuilding(buildingType: BuildingType) = observation().workersBuilding(buildingType)
 fun ObservationInterface.workersBuilding(buildingType: BuildingType) = myUnits

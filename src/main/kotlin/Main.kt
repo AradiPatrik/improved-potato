@@ -14,20 +14,24 @@ import scv.trainScvWith
 
 class Bot : S2Agent() {
 
-    override fun onGameStart() {
-
+    override fun onBuildingConstructionComplete(unit: UnitInPool) {
+        when (unit.unit().type) {
+            Units.TERRAN_SUPPLY_DEPOT -> lowerSupplyDepot(unit)
+        }
     }
 
     override fun onUnitIdle(unit: UnitInPool) {
         when (unit.unit().type) {
-            Units.TERRAN_COMMAND_CENTER -> trainScvWith(unit)
+            Units.TERRAN_COMMAND_CENTER -> if (myScvs.count() < 30) {
+                trainScvWith(unit)
+            }
             Units.TERRAN_SCV -> mineClosestMineralFieldWith(unit)
             Units.TERRAN_BARRACKS -> trainMarineWith(unit)
         }
     }
 
     override fun onStep() {
-        if (workersBuilding(BuildingType.SupplyDepot).size < getOptimalWorkersForSupplyBuilding(supply)) {
+        if (workersBuilding(BuildingType.SupplyDepot).size < optimalNumOfWorkersBuildingSupplyDepots) {
             buildSupplyDepotWith(mineralMiningScvs.first())
         }
 
@@ -43,15 +47,6 @@ class Bot : S2Agent() {
                 }
         }
     }
-
-    fun getOptimalWorkersForSupplyBuilding(currentSupply: Int): Int {
-        return when {
-            currentSupply < 40 && foodUntilSupplyBlocked < 3 -> 1
-            currentSupply < 100 && foodUntilSupplyBlocked < 6 -> 2
-            currentSupply < 170 && foodUntilSupplyBlocked < 12 -> 3
-            else -> 0
-        }
-    }
 }
 
 fun main() {
@@ -60,7 +55,7 @@ fun main() {
         .setWindowSize(1920, 1080)
         .setParticipants(
             S2Coordinator.createParticipant(Race.TERRAN, Bot()),
-            S2Coordinator.createComputer(Race.ZERG, Difficulty.HARDER)
+            S2Coordinator.createComputer(Race.PROTOSS, Difficulty.HARD)
         )
         .launchStarcraft()
         .startGame(BattlenetMap.of("Submarine LE"))
