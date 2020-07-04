@@ -8,13 +8,17 @@ import com.github.ocraft.s2client.protocol.debug.Color
 import com.github.ocraft.s2client.protocol.game.BattlenetMap
 import com.github.ocraft.s2client.protocol.game.Difficulty
 import com.github.ocraft.s2client.protocol.game.Race
-import com.github.ocraft.s2client.protocol.spatial.Point
 import common.myUnits
+import debug.debugColorSequence
 import debug.drawBoxAround
+import map.resourceClusters
+import map.resourceFields
 import scv.mineClosestMineralFieldWith
 import scv.trainMarineWith
 import scv.trainScvWith
 
+@ExperimentalStdlibApi
+@ExperimentalUnsignedTypes
 class Bot : S2Agent() {
 
     override fun onBuildingConstructionComplete(unit: UnitInPool) {
@@ -33,7 +37,6 @@ class Bot : S2Agent() {
         }
     }
 
-    @ExperimentalUnsignedTypes
     override fun onStep() {
         if (workersBuilding(BuildingType.SupplyDepot).size < optimalNumOfWorkersBuildingSupplyDepots) {
             buildSupplyDepotWith(mineralMiningScvs.first())
@@ -42,6 +45,20 @@ class Bot : S2Agent() {
         myScvs.forEach {
             drawBoxAround(it)
         }
+
+        val rc = resourceClusters
+
+        rc.map { it.resourceFields }
+            .zip(debugColorSequence.asIterable())
+            .forEach { (resources, color) ->
+                resources.forEach {
+                    drawBoxAround(
+                        unit = it,
+                        diagonalLength = 2.0f,
+                        color = color
+                    )
+                }
+            }
 
         debug().sendDebug()
 
@@ -59,6 +76,7 @@ class Bot : S2Agent() {
     }
 }
 
+@ExperimentalUnsignedTypes
 @ExperimentalStdlibApi
 fun main() {
     val coordinator = S2Coordinator.setup()
