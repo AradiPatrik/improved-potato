@@ -4,12 +4,13 @@ import com.github.ocraft.s2client.bot.S2Coordinator
 import com.github.ocraft.s2client.bot.gateway.UnitInPool
 import com.github.ocraft.s2client.protocol.data.Abilities
 import com.github.ocraft.s2client.protocol.data.Units
+import com.github.ocraft.s2client.protocol.debug.Color
 import com.github.ocraft.s2client.protocol.game.BattlenetMap
 import com.github.ocraft.s2client.protocol.game.Difficulty
 import com.github.ocraft.s2client.protocol.game.Race
+import com.github.ocraft.s2client.protocol.spatial.Point
 import common.myUnits
-import map.getMapHeightAtLocation
-import map.showPlacementGrid
+import debug.drawBoxAround
 import scv.mineClosestMineralFieldWith
 import scv.trainMarineWith
 import scv.trainScvWith
@@ -32,16 +33,17 @@ class Bot : S2Agent() {
         }
     }
 
+    @ExperimentalUnsignedTypes
     override fun onStep() {
         if (workersBuilding(BuildingType.SupplyDepot).size < optimalNumOfWorkersBuildingSupplyDepots) {
             buildSupplyDepotWith(mineralMiningScvs.first())
         }
 
-        showPlacementGrid()
-        println(myCommandCenters.first().unit().position.z)
-        println(getMapHeightAtLocation(
-            myCommandCenters.first().unit().position.toPoint2d()
-        ))
+        myScvs.forEach {
+            drawBoxAround(it)
+        }
+
+        debug().sendDebug()
 
         if (supply > 16 && minerals > 150 && isEveryBuildingTraining && workersBuilding(BuildingType.Barack).isEmpty()) {
             buildBarackWith(mineralMiningScvs.first())
@@ -64,7 +66,7 @@ fun main() {
         .setWindowSize(1920, 1080)
         .setParticipants(
             S2Coordinator.createParticipant(Race.TERRAN, Bot()),
-            S2Coordinator.createComputer(Race.PROTOSS, Difficulty.HARD)
+            S2Coordinator.createComputer(Race.ZERG, Difficulty.HARD)
         )
         .launchStarcraft()
         .startGame(BattlenetMap.of("Submarine LE"))
