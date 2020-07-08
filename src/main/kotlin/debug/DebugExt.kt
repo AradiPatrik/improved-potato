@@ -46,19 +46,4 @@ fun S2Agent.drawBoxAround(
     )
 }
 
-val colors = listOf(
-    Color.BLACK,
-    Color.BLUE,
-    Color.GRAY,
-    Color.GREEN,
-    Color.PURPLE,
-    Color.RED,
-    Color.TEAL,
-    Color.WHITE,
-    Color.YELLOW
-)
-
-val debugColorSequence = generateSequence(0) { (it + 1) % colors.size }
-    .map { colors[it] }
-
 const val SQRT_2 = 0.85090352453f

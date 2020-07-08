@@ -27,6 +27,5 @@ val vespeneGasTypes = setOf(
     Units.NEUTRAL_SHAKURAS_VESPENE_GEYSER,
     Units.NEUTRAL_VESPENE_GEYSER,
     Units.NEUTRAL_SPACE_PLATFORM_GEYSER
-
 )
 

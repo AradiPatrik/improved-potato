@@ -60,6 +60,8 @@ class Bot : S2Agent() {
                 }
             }
 
+        print(rc.size)
+
         debug().sendDebug()
 
         if (supply > 16 && minerals > 150 && isEveryBuildingTraining && workersBuilding(BuildingType.Barack).isEmpty()) {
