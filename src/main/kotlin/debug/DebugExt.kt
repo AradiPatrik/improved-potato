@@ -10,7 +10,7 @@ import map.getMapHeightAtLocation
 
 fun S2Agent.drawBoxAround(
     unit: UnitInPool,
-    diagonalLength: Float = 1.5f,
+    diagonalLength: Float = 2f,
     color: Color = Color.TEAL
 ) {
     drawBoxAround(unit.unit().position, diagonalLength, color)
@@ -18,7 +18,7 @@ fun S2Agent.drawBoxAround(
 
 fun S2Agent.drawBoxAround(
     unit: Unit,
-    diagonalLength: Float = 1.5f,
+    diagonalLength: Float = 2f,
     color: Color = Color.TEAL
 ) {
     drawBoxAround(unit.position, diagonalLength, color)
@@ -27,7 +27,7 @@ fun S2Agent.drawBoxAround(
 @ExperimentalUnsignedTypes
 fun S2Agent.drawBoxAround(
     point2d: Point2d,
-    diagonalLength: Float = 1.5f,
+    diagonalLength: Float = 2f,
     color: Color = Color.TEAL
 ) {
     drawBoxAround(Point.of(point2d.x, point2d.y, getMapHeightAtLocation(point2d)))
@@ -35,7 +35,7 @@ fun S2Agent.drawBoxAround(
 
 fun S2Agent.drawBoxAround(
     point: Point,
-    diagonalLength: Float = 1.5f,
+    diagonalLength: Float = 2f,
     color: Color = Color.TEAL
 ) {
     val halfEdgeLength = diagonalLength / 4 * SQRT_2

@@ -46,9 +46,7 @@ class Bot : S2Agent() {
             drawBoxAround(it)
         }
 
-        val rc = resourceClusters
-
-        rc.map { it.resourceFields }
+        resourceClusters.map { it.resourceFields }
             .zip(debugColorSequence.asIterable())
             .forEach { (resources, color) ->
                 resources.forEach {
@@ -60,8 +58,6 @@ class Bot : S2Agent() {
                 }
             }
 
-        print(rc.size)
-
         debug().sendDebug()
 
         if (supply > 16 && minerals > 150 && isEveryBuildingTraining && workersBuilding(BuildingType.Barack).isEmpty()) {
@@ -72,7 +68,12 @@ class Bot : S2Agent() {
             observation().myUnits
                 .filter { it.unit().type == Units.TERRAN_MARINE }
                 .forEach {
-                    actions().unitCommand(it.unit(), Abilities.ATTACK_ATTACK, observation().gameInfo.startRaw.get().startLocations.last(), false)
+                    actions().unitCommand(
+                        it.unit(),
+                        Abilities.ATTACK_ATTACK,
+                        observation().gameInfo.startRaw.get().startLocations.last(),
+                        false
+                    )
                 }
         }
     }
